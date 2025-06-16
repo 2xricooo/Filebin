@@ -2,131 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Filebin</title>
+  <title>Filebin - Home</title>
   <style>
     body {
-      background-color: #0b0b0b;
-      color: #f0f0f0;
+      background-color: #0d0d0d;
+      color: #f2f2f2;
       font-family: monospace;
-      margin: 0;
-      padding: 0;
+      padding: 2em;
     }
-    header {
-      background-color: #000;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 2px solid #222;
+    h1 {
+      color: #ff0055;
     }
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      color: #0f0;
+    a, input, textarea, button {
+      background-color: #1a1a1a;
+      color: #f2f2f2;
+      border: 1px solid #333;
+      padding: 0.5em;
+      margin-top: 1em;
+      display: block;
+      width: 100%;
     }
     nav {
-      background-color: #111;
-      padding: 15px;
-      text-align: center;
-      border-bottom: 2px solid #222;
+      background: #111;
+      padding: 1em;
+      margin-bottom: 2em;
     }
     nav a {
-      color: #0ff;
+      margin-right: 1em;
       text-decoration: none;
-      margin: 0 20px;
-      font-weight: bold;
-    }
-    nav a:hover {
-      color: #fff;
-      text-decoration: underline;
-    }
-    .container {
-      padding: 30px;
-    }
-    .search-bar input {
-      width: 100%;
-      padding: 12px;
-      background: #222;
-      border: 1px solid #444;
-      color: #eee;
-      border-radius: 6px;
-    }
-    .posts {
-      margin-top: 30px;
-    }
-    .post {
-      padding: 20px;
-      border-bottom: 1px solid #333;
-    }
-    .post a {
-      color: #f55;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-    .post a:hover {
-      text-decoration: underline;
-    }
-    .tag {
-      display: inline-block;
-      background-color: #333;
-      color: #0ff;
-      padding: 3px 8px;
-      font-size: 0.75em;
-      margin-left: 12px;
-      border-radius: 4px;
-    }
-    section {
-      margin-bottom: 60px;
-    }
-    .upload-form, .auth-forms {
-      background: #1a1a1a;
-      padding: 25px;
-      border: 1px solid #333;
-      border-radius: 8px;
-    }
-    .upload-form input, .upload-form textarea, .upload-form button,
-    .auth-forms input, .auth-forms button {
-      width: 100%;
-      margin: 12px 0;
-      padding: 12px;
-      background: #222;
-      border: 1px solid #444;
-      color: #eee;
-      border-radius: 6px;
-    }
-    .upload-form button, .auth-forms button {
-      background-color: #0f0;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .auth-forms {
-      display: flex;
-      gap: 30px;
-      margin-top: 40px;
-    }
-    .auth-forms form {
-      flex: 1;
+      color: #f2f2f2;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Filebin</h1>
-  </header>
   <nav>
-    <a href="home.html">Home</a>
+    <a href="index.html">Home</a>
     <a href="upload.html">Upload</a>
     <a href="posts.html">Posts</a>
     <a href="search.html">Search</a>
     <a href="login.html">Login</a>
-    <a href="register.html">Register</a>
   </nav>
-  <div class="container">
-    <section id="home">
-      <h2>Welcome to Filebin</h2>
-      <p>Share, search and manage your files/posts securely and anonymously.</p>
-    </section>
-  </div>
+  <h1>Welcome to Filebin</h1>
+  <p>Post and read text content anonymously. Clean, fast, and simple — just like old Doxbin.</p>
 </body>
 </html>

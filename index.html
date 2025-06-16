@@ -1,119 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DarkPaste</title>
+  <meta charset="UTF-8">
+  <title>DarkWiki</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background-color: #0d0d0d;
-      color: #f2f2f2;
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 20px;
-      text-align: center;
+      background-color: #0a0a0a;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
     }
-
-    h1 {
-      margin-top: 30px;
-    }
-
-    textarea, input {
-      width: 90%;
-      max-width: 700px;
-      margin-top: 10px;
+    nav {
+      background-color: #111;
       padding: 10px;
-      background: #1a1a1a;
-      border: 1px solid #444;
-      color: #fff;
-      border-radius: 5px;
-      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      border-bottom: 1px solid #222;
     }
-
-    textarea {
-      height: 300px;
-      resize: vertical;
+    nav a {
+      color: #f1f1f1;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: 0.3s;
     }
-
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #222;
-      color: #fff;
-      border: 1px solid #555;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #333;
-    }
-
-    #linkBox {
-      margin-top: 20px;
+    nav a:hover {
       color: #0f0;
-      word-break: break-all;
     }
-
-    pre {
-      text-align: left;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      background: #1a1a1a;
-      padding: 15px;
-      border-radius: 5px;
-      max-width: 700px;
-      margin: 20px auto;
+    .content {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .hidden {
+      display: none;
+    }
+    h1 {
+      color: #0f0;
+    }
+    code {
+      background: #111;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>DarkPaste</h1>
 
-  <div id="pasteForm">
-    <input type="text" id="title" placeholder="Title"><br>
-    <textarea id="content" placeholder="Write your paste here..."></textarea><br>
-    <button onclick="createPaste()">Create Paste</button>
-    <div id="linkBox"></div>
-  </div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#tools">Tools</a>
+    <a href="#about">About</a>
+  </nav>
 
-  <div id="pasteView" style="display: none;">
-    <h2 id="viewTitle"></h2>
-    <pre id="viewContent"></pre>
+  <div class="content">
+    <div id="page-home" class="page">
+      <h1>Welcome to DarkWiki</h1>
+      <p>This is a fully offline, single-page dark wiki. Use the nav bar to switch between sections.</p>
+      <p>You can edit this page directly in the HTML file. It's designed for personal use, guides, or learning.</p>
+    </div>
+
+    <div id="page-tools" class="page hidden">
+      <h1>Tools</h1>
+      <ul>
+        <li><code>nslookup</code> – DNS record checking</li>
+        <li><code>whois</code> – Domain info lookup</li>
+        <li><code>ping</code> – Test host reachability</li>
+      </ul>
+    </div>
+
+    <div id="page-about" class="page hidden">
+      <h1>About</h1>
+      <p>This wiki is built using a single HTML file, using only JavaScript and CSS. It requires no server.</p>
+      <p>You can duplicate this file and modify the content to fit any purpose — guides, notes, personal site, etc.</p>
+    </div>
   </div>
 
   <script>
-    function createPaste() {
-      const title = encodeURIComponent(document.getElementById("title").value);
-      const content = encodeURIComponent(document.getElementById("content").value);
-
-      if (!title || !content) {
-        alert("Title and content are required.");
-        return;
-      }
-
-      const pasteData = btoa(`${title}::${content}`);
-      const url = `${location.origin}${location.pathname}#${pasteData}`;
-      document.getElementById("linkBox").innerHTML = `🔗 Shareable Link:<br><a href="${url}">${url}</a>`;
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+      const page = document.getElementById('page-' + pageId);
+      if (page) page.classList.remove('hidden');
     }
 
-    function loadPaste() {
-      if (location.hash) {
-        const encoded = location.hash.slice(1);
-        try {
-          const decoded = atob(encoded);
-          const [title, content] = decoded.split("::");
-          document.getElementById("pasteForm").style.display = "none";
-          document.getElementById("pasteView").style.display = "block";
-          document.getElementById("viewTitle").innerText = decodeURIComponent(title);
-          document.getElementById("viewContent").innerText = decodeURIComponent(content);
-        } catch (e) {
-          document.body.innerHTML = "<h2>⚠️ Invalid or corrupted paste link.</h2>";
-        }
-      }
-    }
+    window.addEventListener('hashchange', () => {
+      const page = location.hash.slice(1) || 'home';
+      showPage(page);
+    });
 
-    loadPaste();
+    // Load correct page on first load
+    window.addEventListener('load', () => {
+      const page = location.hash.slice(1) || 'home';
+      showPage(page);
+    });
   </script>
 </body>
 </html>

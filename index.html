@@ -1,55 +1,119 @@
-// FILE: server.js (Node.js Backend)
-
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.static('public'));
-app.use(express.json());
-
-// Save new paste
-app.post('/api/paste', (req, res) => {
-  const { title, content } = req.body;
-  if (!title || !content) {
-    return res.status(400).json({ error: 'Title and content required' });
-  }
-
-  const id = uuidv4().slice(0, 6);
-  const paste = { id, title, content, date: new Date().toISOString() };
-  const filePath = path.join(__dirname, 'pastes', `${id}.json`);
-
-  fs.writeFileSync(filePath, JSON.stringify(paste, null, 2));
-  res.json({ id });
-});
-
-// View paste
-app.get('/view/:id', (req, res) => {
-  const pasteFile = path.join(__dirname, 'pastes', `${req.params.id}.json`);
-  if (fs.existsSync(pasteFile)) {
-    const paste = JSON.parse(fs.readFileSync(pasteFile));
-    res.send(`<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>${paste.title}</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DarkPaste</title>
   <style>
-    body { background: #0a0a0a; color: #eee; font-family: monospace; padding: 2rem; }
-    pre { background: #111; padding: 1rem; border-radius: 10px; }
+    body {
+      background-color: #0d0d0d;
+      color: #f2f2f2;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 30px;
+    }
+
+    textarea, input {
+      width: 90%;
+      max-width: 700px;
+      margin-top: 10px;
+      padding: 10px;
+      background: #1a1a1a;
+      border: 1px solid #444;
+      color: #fff;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      height: 300px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #222;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    #linkBox {
+      margin-top: 20px;
+      color: #0f0;
+      word-break: break-all;
+    }
+
+    pre {
+      text-align: left;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 5px;
+      max-width: 700px;
+      margin: 20px auto;
+    }
   </style>
 </head>
 <body>
-  <h1>${paste.title}</h1>
-  <pre>${paste.content.replace(/</g, '&lt;')}</pre>
-  <p><small>Created on: ${new Date(paste.date).toLocaleString()}</small></p>
-</body>
-</html>`);
-  } else {
-    res.status(404).send('Paste not found');
-  }
-});
+  <h1>DarkPaste</h1>
 
-app.listen(PORT, () => console.log(`Pastebin running on port ${PORT}`));
+  <div id="pasteForm">
+    <input type="text" id="title" placeholder="Title"><br>
+    <textarea id="content" placeholder="Write your paste here..."></textarea><br>
+    <button onclick="createPaste()">Create Paste</button>
+    <div id="linkBox"></div>
+  </div>
+
+  <div id="pasteView" style="display: none;">
+    <h2 id="viewTitle"></h2>
+    <pre id="viewContent"></pre>
+  </div>
+
+  <script>
+    function createPaste() {
+      const title = encodeURIComponent(document.getElementById("title").value);
+      const content = encodeURIComponent(document.getElementById("content").value);
+
+      if (!title || !content) {
+        alert("Title and content are required.");
+        return;
+      }
+
+      const pasteData = btoa(`${title}::${content}`);
+      const url = `${location.origin}${location.pathname}#${pasteData}`;
+      document.getElementById("linkBox").innerHTML = `🔗 Shareable Link:<br><a href="${url}">${url}</a>`;
+    }
+
+    function loadPaste() {
+      if (location.hash) {
+        const encoded = location.hash.slice(1);
+        try {
+          const decoded = atob(encoded);
+          const [title, content] = decoded.split("::");
+          document.getElementById("pasteForm").style.display = "none";
+          document.getElementById("pasteView").style.display = "block";
+          document.getElementById("viewTitle").innerText = decodeURIComponent(title);
+          document.getElementById("viewContent").innerText = decodeURIComponent(content);
+        } catch (e) {
+          document.body.innerHTML = "<h2>⚠️ Invalid or corrupted paste link.</h2>";
+        }
+      }
+    }
+
+    loadPaste();
+  </script>
+</body>
+</html>

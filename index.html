@@ -1,19 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Filebin - Home</title>
+  <meta charset="UTF-8">
+  <title>Filebin</title>
   <style>
     body {
       background-color: #0d0d0d;
       color: #f2f2f2;
       font-family: monospace;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background: #111;
+      padding: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav .logo {
+      display: flex;
+      align-items: center;
+    }
+    nav .logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    nav a {
+      margin-right: 1em;
+      text-decoration: none;
+      color: #f2f2f2;
+      font-weight: bold;
+    }
+    main {
       padding: 2em;
     }
-    h1 {
-      color: #ff0055;
+    section {
+      display: none;
     }
-    a, input, textarea, button {
+    section.active {
+      display: block;
+    }
+    input, textarea, button {
       background-color: #1a1a1a;
       color: #f2f2f2;
       border: 1px solid #333;
@@ -22,27 +50,70 @@
       display: block;
       width: 100%;
     }
-    nav {
-      background: #111;
-      padding: 1em;
-      margin-bottom: 2em;
-    }
-    nav a {
-      margin-right: 1em;
-      text-decoration: none;
-      color: #f2f2f2;
-    }
   </style>
 </head>
 <body>
   <nav>
-    <a href="index.html">Home</a>
-    <a href="upload.html">Upload</a>
-    <a href="posts.html">Posts</a>
-    <a href="search.html">Search</a>
-    <a href="login.html">Login</a>
+    <div class="logo">
+      <img src="reaper.png" alt="Logo">
+      <span>Filebin</span>
+    </div>
+    <div>
+      <a href="#" onclick="showPage('home')">Home</a>
+      <a href="#" onclick="showPage('upload')">Upload</a>
+      <a href="#" onclick="showPage('posts')">Posts</a>
+      <a href="#" onclick="showPage('search')">Search</a>
+      <a href="#" onclick="showPage('login')">Login</a>
+      <a href="#" onclick="showPage('register')">Register</a>
+    </div>
   </nav>
-  <h1>Welcome to Filebin</h1>
-  <p>Post and read text content anonymously. Clean, fast, and simple.</p>
+  <main>
+    <section id="home" class="active">
+      <h1>Welcome to Filebin</h1>
+      <p>Post and read text content anonymously.</p>
+    </section>
+    <section id="upload">
+      <h1>Upload Post</h1>
+      <form>
+        <input type="text" placeholder="Title">
+        <textarea placeholder="Your content..." rows="10"></textarea>
+        <button>Upload</button>
+      </form>
+    </section>
+    <section id="posts">
+      <h1>Recent Posts</h1>
+      <ul>
+        <li><a href="#">Example Post</a> - <span style="color: gray;">tag: general</span></li>
+      </ul>
+    </section>
+    <section id="search">
+      <h1>Search</h1>
+      <input type="text" placeholder="Search...">
+    </section>
+    <section id="login">
+      <h1>Login</h1>
+      <form>
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button>Login</button>
+      </form>
+    </section>
+    <section id="register">
+      <h1>Register</h1>
+      <form>
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button>Register</button>
+      </form>
+    </section>
+  </main>
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll('main section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+    }
+  </script>
 </body>
 </html>
